@@ -38,7 +38,7 @@ public class Server {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH_mm_ss");  
 		LocalDateTime createDate = LocalDateTime.now(); 
 		String spaghetti = "log-server-"+dtf.format(createDate);
-		File log = new File("./logs/server/"+spaghetti+".txt");
+		File log = new File("./../../logs/server/"+spaghetti+".txt");
 		Server babyServer = new Server(6969);
 		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		System.out.println("Nueva instancia del servidor");
@@ -53,12 +53,12 @@ public class Server {
 				fw.write("Se enviará el archivo video.mp4"+ "\n");
 	        	Socket socket = serverCoket.accept();
 	        	System.out.println("Nueva conexión");
-	        	File chivito2 = new File("./docs/video.mp4");
-	            fis = new FileInputStream("./docs/video.mp4");
+	        	File chivito2 = new File("./../../docs/video.mp4");
+	            fis = new FileInputStream("./../../docs/video.mp4");
 	            bis = new BufferedInputStream(fis);
 	            out = new BufferedOutputStream(socket.getOutputStream());
 	            int count;
-	            File chivaso = new File("./docs/test.mp4");
+	            File chivaso = new File("./../../docs/test.mp4");
 				fw.write("El tamaño del archivo es: " + chivaso.length() + " bytes" + "\n");
 	            System.out.println("Enviando el archivo");
 	            int n = 0;
