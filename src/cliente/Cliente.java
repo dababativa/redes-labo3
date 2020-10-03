@@ -47,11 +47,15 @@ public class Cliente{
 
 	public Cliente(){
 		try {
+			System.out.println("Conectándose al servidor " + IP + " a través del puerto " + PUERTO);
 			socket = new Socket(IP, PUERTO);
+			System.out.println("Conexión exitosa");
 			is = socket.getInputStream();
+			
 			bufferSize = socket.getReceiveBufferSize();
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			System.out.println("Listo para la transferencia de archivos");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -96,17 +100,31 @@ public class Cliente{
 		byte[] respuesta;
 		String mordiscos;
 		try {
-			
-			System.out.println("Buffer size: " + bufferSize);
 			FileOutputStream fos = new FileOutputStream("./docs/test.mp4");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			byte[] bytes = new byte[bufferSize];
 			int count;
+			System.out.println("Inicia la transferencia de archivos");
+			int n = 0;
+			long initio = System.currentTimeMillis();
 			while ((count = is.read(bytes)) >= 0) {
+				n++;
 				bos.write(bytes, 0, count);
+				System.out.println("Descargando el segmento " + n);
 			}
+			int finito = (int) (System.currentTimeMillis() - initio);
+			String tiempo = "";
+			if(finito<1000 && finito >99) {
+				tiempo = "0." + finito;
+			} else {
+				finito = finito/1000;
+				tiempo += finito;
+			}
+			System.out.println("Tiempo total de descarga: " + tiempo + " segundos");
+			System.out.println("Finaliza la descarga");
 			bos.close();
 			is.close();
+			System.out.println("Desconectado del servidor");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
