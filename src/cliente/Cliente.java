@@ -40,10 +40,16 @@ public class Cliente{
 	private static PrintWriter pw;
 
 	private static BufferedReader br;
+	
+	private static int bufferSize;
+	
+	private static InputStream is;
 
 	public Cliente(){
 		try {
 			socket = new Socket(IP, PUERTO);
+			is = socket.getInputStream();
+			bufferSize = socket.getReceiveBufferSize();
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (Exception e) {
@@ -90,13 +96,22 @@ public class Cliente{
 		byte[] respuesta;
 		String mordiscos;
 		try {
-			mordiscos = br.readLine();
-			System.out.println("soy un mordelon "+mordiscos);
+			
+			System.out.println("Buffer size: " + bufferSize);
+			FileOutputStream fos = new FileOutputStream("./docs/test.mp4");
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			byte[] bytes = new byte[bufferSize];
+			int count;
+			while ((count = is.read(bytes)) >= 0) {
+				bos.write(bytes, 0, count);
+			}
+			bos.close();
+			is.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 
 		//Etapa 1
 		try {
