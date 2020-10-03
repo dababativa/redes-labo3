@@ -1,0 +1,1 @@
+Se inicia la descarga del archivo el 2020/10/03 10:52:28Se descargará el archivo video.mp4 y se guardará como test.mp4El tamaño del archivo es: 50626560 bytesEl archivo se descargó con éxito en un tiempo de 0.246 segundosTotal de segmentos descargados: 4766 segmentos

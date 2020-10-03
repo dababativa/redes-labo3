@@ -1,27 +1,11 @@
 package cliente;
 
 import java.io.*;
-import java.math.BigInteger;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.Calendar;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;    
 
-import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
-import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.operator.ContentSigner;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 public class Cliente{
 
@@ -40,9 +24,9 @@ public class Cliente{
 	private static PrintWriter pw;
 
 	private static BufferedReader br;
-	
+
 	private static int bufferSize;
-	
+
 	private static InputStream is;
 
 	public Cliente(){
@@ -51,7 +35,7 @@ public class Cliente{
 			socket = new Socket(IP, PUERTO);
 			System.out.println("Conexión exitosa");
 			is = socket.getInputStream();
-			
+
 			bufferSize = socket.getReceiveBufferSize();
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -62,10 +46,18 @@ public class Cliente{
 	}
 
 	public static void main(String[] args){
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH_mm_ss");  
+		LocalDateTime createDate = LocalDateTime.now(); 
+		String spaghetti = "log-client-"+dtf.format(createDate);
+		File log = new File("./logs/client/"+spaghetti+".txt");
 		Cliente cliente = new Cliente();
+		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		byte[] respuesta;
 		String mordiscos;
 		try {
+			FileWriter fw = new FileWriter(log, true);
+			fw.write("Se inicia la descarga del archivo el " + dtf.format(LocalDateTime.now()) + "\n");
+			fw.write("Se descargará el archivo video.mp4 y se guardará como test.mp4" + "\n");
 			FileOutputStream fos = new FileOutputStream("./docs/test.mp4");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			byte[] bytes = new byte[bufferSize];
@@ -86,24 +78,21 @@ public class Cliente{
 				finito = finito/1000;
 				tiempo += finito;
 			}
+			File chivaso = new File("./docs/test.mp4");
+			fw.write("El tamaño del archivo es: " + chivaso.length() + " bytes" + "\n");
+			fw.write("El archivo se descargó con éxito en un tiempo de " + tiempo + " segundos" + "\n");
+			fw.write("Total de segmentos descargados: " + n + " segmentos" + "\n");
 			System.out.println("Tiempo total de descarga: " + tiempo + " segundos");
 			System.out.println("Finaliza la descarga");
 			bos.close();
 			is.close();
+			pw.println("Descarga finalizada. Código:1");
+			System.out.println(spaghetti);
 			System.out.println("Desconectado del servidor");
+			fw.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-
-
-		//Etapa 1
-		try {
-			pw.println(HOLA);
-			//			respuesta = br.readLine();
-			//			System.out.println("Respuesta del servidor: "+respuesta);
-		} catch (Exception e) {
-			System.out.println("Excepcion en etapa 1: "+e.getMessage());
 		}
 	}
 }

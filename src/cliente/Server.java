@@ -50,8 +50,10 @@ public class Server {
 	            out = new BufferedOutputStream(socket.getOutputStream());
 	            int count;
 	            System.out.println("Enviando el archivo");
+	            int n = 0;
 	            while ((count = bis.read(buffer)) > 0) {
-	                out.write(buffer, 0, count);
+	                n++;
+	            	out.write(buffer, 0, count);
 
 	            }
 	            System.out.println("Terminando la transferencia del archivo");
