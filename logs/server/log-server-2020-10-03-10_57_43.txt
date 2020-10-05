@@ -1,5 +1,0 @@
-Se inicia el envio del archivo el 2020/10/03 10:57:43
-Se enviará el archivo video.mp4
-El tamaño del archivo es: 50633505 bytes
-El archivo se envió con éxito en un tiempo de 0.293 segundos
-Total de segmentos enviados: 6181 segmentos

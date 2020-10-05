@@ -3,11 +3,12 @@ package cliente;
 import java.io.*;
 import java.net.Socket;
 
-import java.time.format.DateTimeFormatter;  
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 import java.time.LocalDateTime;    
 
 
-public class Cliente{
+public class Cliente extends Thread{
 
 	public final static int PUERTO = 6969;
 
@@ -21,15 +22,18 @@ public class Cliente{
 
 	private Socket socket;
 
-	private static PrintWriter pw;
+	private PrintWriter pw;
 
-	private static BufferedReader br;
+	private BufferedReader br;
 
 	private static int bufferSize;
 
-	private static InputStream is;
+	private InputStream is;
+	
+	private int id;
 
-	public Cliente(){
+	public Cliente(int id){
+		this.id = id;
 		try {
 			System.out.println("Conectándose al servidor " + IP + " a través del puerto " + PUERTO);
 			socket = new Socket(IP, PUERTO);
@@ -44,13 +48,12 @@ public class Cliente{
 			e.printStackTrace();
 		} 
 	}
-
-	public static void main(String[] args){
+	
+	public void run(){
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH_mm_ss");  
 		LocalDateTime createDate = LocalDateTime.now(); 
-		String spaghetti = "log-client-"+dtf.format(createDate);
+		String spaghetti = "log-client-"+id+"-"+dtf.format(createDate);
 		File log = new File("./logs/client/"+spaghetti+".txt");
-		Cliente cliente = new Cliente();
 		dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 		byte[] respuesta;
 		String mordiscos;
@@ -58,7 +61,7 @@ public class Cliente{
 			FileWriter fw = new FileWriter(log, true);
 			fw.write("Se inicia la descarga del archivo el " + dtf.format(LocalDateTime.now()) + "\n");
 			fw.write("Se descargará el archivo video.mp4 y se guardará como test.mp4" + "\n");
-			FileOutputStream fos = new FileOutputStream("./docs/test.mp4");
+			FileOutputStream fos = new FileOutputStream("./docs/test-"+id+".mp4");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			byte[] bytes = new byte[bufferSize];
 			int count;
@@ -68,7 +71,7 @@ public class Cliente{
 			while ((count = is.read(bytes)) >= 0) {
 				n++;
 				bos.write(bytes, 0, count);
-				System.out.println("Descargando el segmento " + n);
+				//System.out.println("Descargando el segmento " + n);
 			}
 			int finito = (int) (System.currentTimeMillis() - initio);
 			String tiempo = "";
@@ -94,6 +97,18 @@ public class Cliente{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	public static void main(String[] args){
+		Cliente[] clientes = new Cliente[25];
+		for(int i = 0; i<clientes.length;i++) {
+			clientes[i] = new Cliente(i);
+		}
+		for (int i = 0; i < clientes.length; i++) {
+			clientes[i].run();
+			
+		}
+		
 	}
 }
 
