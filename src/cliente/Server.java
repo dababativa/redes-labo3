@@ -23,7 +23,7 @@ public class Server {
 
 	private static DataInputStream in = null;
 	
-	private final static String ROOT = "./";
+	private final static String ROOT = "./../../";
 
 
 
@@ -130,7 +130,8 @@ public class Server {
 				FileWriter fw = new FileWriter(log, true);
 				fw.write("Se inicia el envio del archivo el " + dtf.format(LocalDateTime.now()) + "\n");
 				fw.write("Se enviará el archivo "+ nombre + "\n");
-				System.out.println("Nueva conexión");
+				System.out.println("Nueva "
+						+ "conexión");
 				File chivito2 = new File(ROOT+"docs/"+nombre);
 				fis = new FileInputStream(ROOT+"docs/"+nombre);
 				bis = new BufferedInputStream(fis);

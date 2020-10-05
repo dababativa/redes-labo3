@@ -100,7 +100,10 @@ public class Cliente extends Thread{
 	}
 
 	public static void main(String[] args){
-		Cliente[] clientes = new Cliente[25];
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Ingrese la cantidad de clientes:");
+		int numClientes = sc.nextInt();
+		Cliente[] clientes = new Cliente[numClientes];
 		for(int i = 0; i<clientes.length;i++) {
 			clientes[i] = new Cliente(i);
 		}
